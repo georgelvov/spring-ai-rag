@@ -20,6 +20,21 @@ import java.util.stream.Collectors;
 import static com.glvov.springairag.advisor.ExpansionQueryAdvisor.ENRICHED_QUESTION;
 import static com.glvov.springairag.utils.FileLoader.loadFile;
 
+/**
+ * Implements Retrieval-Augmented Generation (RAG) functionality for enhancing LLM requests
+ * with relevant information from a vector database.
+ * <br><br>
+ * This advisor:
+ * <ul>
+ *   <li>Retrieves relevant documents from a vector store based on the user's query</li>
+ *   <li>Optionally reranks results using BM25 algorithm for improved relevance</li>
+ *   <li>Formats retrieved documents into context for the LLM prompt</li>
+ *   <li>Augments the user's original question with this context</li>
+ * </ul>
+ * <br>
+ * When reranking is enabled, the advisor initially retrieves twice the requested number of documents (topK * 2),
+ * then applies BM25 reranking to select the most relevant subset, improving result quality.
+ */
 @Builder
 public class RagAdvisor implements BaseAdvisor {
 
