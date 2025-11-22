@@ -1,10 +1,9 @@
-package com.glvov.springairag.services;
+package com.glvov.springairag.service;
 
 import com.glvov.springairag.model.Chat;
 import com.glvov.springairag.model.ChatEntry;
 import com.glvov.springairag.model.Role;
 import com.glvov.springairag.repository.ChatRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
@@ -34,7 +33,7 @@ public class ChatService {
 
 
     public List<Chat> getAllChats() {
-        return chatRepo.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+        return chatRepo.findAll();
     }
 
     public Chat createNewChat(String title) {

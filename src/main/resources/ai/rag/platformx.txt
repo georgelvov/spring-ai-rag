@@ -1,0 +1,52 @@
+PlatformX
+
+PlatformX is a suite of components providing solutions for common and recurring aspects of API management
+and integration patterns which contains following components:
+
+1. GatewayA
+2. IdentityB
+3. ControlC
+4. MessagingD
+5. PermissionE
+6. LegacyF
+
+GatewayA
+GatewayA is a standard managed API gateway.
+GatewayA provides gateway mesh functionality to offer seamless exposure and consumption of APIs even across
+private and public cloud environments as well as on-premise data centers
+All traffic is routed through GatewayA, which provides a single point of entry for all requests and responses.
+
+IdentityB
+IdentityB is the Machine-to-Machine (M2M) Identity Provider of PlatformX
+The identity provider enables the authentication and authorization of consumers to access a subscribed service.
+In order to call GatewayA, the consumer must be authenticated by IdentityB.
+This is done via OAuth2.0 (RFC6749) and the Client Credentials Flow (Section 4.4 of RFC6749).
+
+ControlC
+ControlC is the PlatformX configuration management or Control Plane
+ControlC enables the declarative configuration of the PlatformX components for an application.
+It provides a single, declarative, Kubernetes-resource-style interface to manage the configuration of all
+PlatformX components.
+ControlC is by design a Kubernetes-native application, which means it is designed to run on Kubernetes.
+
+In order to create, update, or delete a configuration item, the controlC-CLI tool is used to apply or delete the
+corresponding YAML file.
+The controlC-CLI tool is available as a Docker image, which is intended to be used as a pipeline
+step within a CI/CD pipeline.
+
+MessagingD
+Publish/Subscribe integration pattern exposed via REST APIs
+MessagingD is a component that provides easily consumable REST APIs for the Publish/Subscribe integration pattern.
+It enables the decoupling of applications by providing asynchronous messaging capabilities.
+MessagingD includes a rich feature set consisting of—amongst others—conditional, push- and pull-based delivery,
+and content filtering.
+
+PermissionE
+Component of PlatformX to enable consistent identity and permission management for APIs
+Permission service that resolves user roles into fine-grained RBAC permissions.
+It enables consistent role-to-permission mapping for applications connected to PlatformX,
+as one user role might be translated into a different set of permissions for different applications.
+
+LegacyF
+LegacyF is a temporary replacement for WFAM-system, only for those systems that cannot migrate away from WFAM-system to
+PlatformX in time or budget.

@@ -1,0 +1,17 @@
+Support contacts for the PlatformX component:
+
+1. GatewayA:
+   gateway-a-team@support.com, bob.powel@gmail.com
+2. IdentityB:
+   identity-b@support.com, bob.powel@gmail.com
+3. ControlC:
+   control-c-department@support.com, kai.rosenkranz@gmail.com
+4. MessagingD:
+   messaging-d-team@support.com, ashley.cole@gmail.com
+5. PermissionE:
+   platformx-permission-e-team@support.com, lina.roberts@gmail.com
+6. LegacyF:
+   legacy-f-team@support.com, andy.green@gmail.com
+
+Main support:
+platformx-team@support.com

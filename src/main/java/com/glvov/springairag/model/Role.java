@@ -2,10 +2,6 @@ package com.glvov.springairag.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.messages.Message;
-import org.springframework.ai.chat.messages.SystemMessage;
-import org.springframework.ai.chat.messages.UserMessage;
 
 import java.util.Arrays;
 
@@ -13,31 +9,16 @@ import java.util.Arrays;
 @Getter
 public enum Role {
 
-    USER("user") {
-        @Override
-        Message getMessage(String prompt) {
-            return new UserMessage(prompt);
-        }
-    }, ASSISTANT("assistant") {
-        @Override
-        Message getMessage(String prompt) {
-            return new AssistantMessage(prompt);
-        }
-    }, SYSTEM("system") {
-        @Override
-        Message getMessage(String prompt) {
-            return new SystemMessage(prompt);
-        }
-    };
+    USER("user"),
+    ASSISTANT("assistant"),
+    SYSTEM("system");
 
-    private final String role;
+    private final String value;
 
-    public static Role getRole(String roleName) {
+    public static Role fromString(String value) {
         return Arrays.stream(Role.values())
-                .filter(role -> role.role.equals(roleName))
+                .filter(role -> role.value.equals(value))
                 .findFirst()
                 .orElseThrow();
     }
-
-    abstract Message getMessage(String prompt);
 }

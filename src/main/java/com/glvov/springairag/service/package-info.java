@@ -1,4 +1,4 @@
 @NonNullApi
-package com.glvov.springairag.ai.advisors;
+package com.glvov.springairag.service;
 
 import org.springframework.lang.NonNullApi;

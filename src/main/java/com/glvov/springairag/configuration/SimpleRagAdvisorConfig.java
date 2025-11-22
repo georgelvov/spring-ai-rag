@@ -6,44 +6,32 @@ import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvi
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
 
 //@Configuration
 @RequiredArgsConstructor
 public class SimpleRagAdvisorConfig {
 
-    private static final String PROMPT_TEMPLATE = """
-            {query}
-            
-            Контекст:
-            ---------------------------
-            {question_answer_context}
-            ---------------------------
-            
-            Отвечай только на основе контекста выше.
-            Если информации нет в контексте, сообщи, что не можешь ответить
-            """;
+    //@Value("classpath:ai/prompts/question_and_answer.txt")
+    private final Resource prompt;
 
     private final VectorStore vectorStore;
 
 
     //@Bean
-    public Advisor getSimpleRagAdvisor() {
-        SearchRequest searchRequest = createSearchRequest();
+    public Advisor simpleRagAdvisor() {
+        SearchRequest searchRequest = SearchRequest.builder()
+                .topK(4)
+                .similarityThreshold(0.65)
+                .build();
 
         return QuestionAnswerAdvisor
                 .builder(vectorStore)
-                .promptTemplate(new PromptTemplate(PROMPT_TEMPLATE))
+                .promptTemplate(new PromptTemplate(prompt))
                 .searchRequest(searchRequest)
                 .order(3)
-                .build();
-    }
-
-    private SearchRequest createSearchRequest() {
-        return SearchRequest.builder()
-                .topK(4)
-                .similarityThreshold(0.65)
                 .build();
     }
 }

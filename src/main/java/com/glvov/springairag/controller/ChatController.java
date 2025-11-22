@@ -1,7 +1,7 @@
 package com.glvov.springairag.controller;
 
 import com.glvov.springairag.model.Chat;
-import com.glvov.springairag.services.ChatService;
+import com.glvov.springairag.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

@@ -1,0 +1,12 @@
+Question:
+---------------------------
+{query}
+---------------------------
+
+Context:
+---------------------------
+{question_answer_context}
+---------------------------
+
+Answer only based on the context above.
+If the information is not in the context, say that you cannot answer.

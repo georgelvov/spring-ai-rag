@@ -1,6 +1,7 @@
-package com.glvov.springairag.ai.advisors;
+package com.glvov.springairag.advisor;
 
-import com.glvov.springairag.ai.BM25RerankEngine;
+import com.glvov.springairag.advisor.misc.BM25RerankEngine;
+import com.glvov.springairag.utils.FileLoader;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.ai.chat.client.ChatClientRequest;
@@ -16,16 +17,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.glvov.springairag.ai.advisors.ExpansionQueryAdvisor.ENRICHED_QUESTION;
+import static com.glvov.springairag.advisor.ExpansionQueryAdvisor.ENRICHED_QUESTION;
+import static com.glvov.springairag.utils.FileLoader.loadFile;
 
 @Builder
 public class RagAdvisor implements BaseAdvisor {
 
-    @Builder.Default
-    private static final String PROMPT_TEMPLATE = """
-            Context: {context}
-            Question: {question}
-            """;
+    private static final String RAG_PROMPT = loadFile("/ai/prompts/rag.txt");
 
     /**
      * <p>
@@ -54,6 +52,9 @@ public class RagAdvisor implements BaseAdvisor {
             .similarityThreshold(0.62)
             .build();
 
+    @Builder.Default
+    private final boolean rerankEnabled = true;
+
     @Getter
     private final int order;
 
@@ -76,26 +77,28 @@ public class RagAdvisor implements BaseAdvisor {
                 SearchRequest
                         .from(searchRequest)
                         .query(queryToRag)
-                        .topK(searchRequest.getTopK() * 2)
+                        .topK(rerankEnabled ? searchRequest.getTopK() * 2 : searchRequest.getTopK())
                         .build()
         );
 
         if (documents.isEmpty()) {
             return chatClientRequest
                     .mutate()
-                    .context("CONTEXT", "No documents found")
+                    .context("CONTEXT", "No documents found in Vector Store")
                     .build();
         }
 
-        BM25RerankEngine rerankEngine = BM25RerankEngine.builder().build();
-        List<Document> rerankedDocuments = rerankEngine.rerank(documents, queryToRag, searchRequest.getTopK());
+        if (rerankEnabled) {
+            BM25RerankEngine rerankEngine = BM25RerankEngine.builder().build();
+            documents = rerankEngine.rerank(documents, queryToRag, searchRequest.getTopK());
+        }
 
         // this is not the context like in ExpansionAdvisor, it is the context for the LLM inside the prompt
-        String promptContext = rerankedDocuments.stream()
+        String promptContext = documents.stream()
                 .map(Document::getText)
                 .collect(Collectors.joining(System.lineSeparator()));
 
-        String finalUserPrompt = new PromptTemplate(PROMPT_TEMPLATE)
+        String finalUserPrompt = new PromptTemplate(RAG_PROMPT)
                 .render(Map.of("context", promptContext, "question", originalUserQuestion));
 
         return chatClientRequest

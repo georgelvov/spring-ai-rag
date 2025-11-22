@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (!prompt) return;
         chatInput.value = "";
 
-        // Добавляем сообщение пользователя в чат
+        // Add the user's message to the chat
         const userDiv = document.createElement("div");
         userDiv.className = "message user";
         userDiv.innerHTML = `<img src="/images/user.png" alt="User"><div class="bubble">${prompt}</div>`;
@@ -21,12 +21,12 @@ document.addEventListener("DOMContentLoaded", function() {
         const eventSource = new EventSource(url);
         let fullText = "";
 
-        // Создаем блок для ответа AI
+        // Create a block for the AI response
         const aiDiv = document.createElement("div");
         aiDiv.className = "message mentor";
-        // Добавляем изображение ассистента
+        // Add the assistant's image
         aiDiv.innerHTML = `<img src="/images/mentor.png" alt="Mentor">`;
-        // Создаем элемент для содержимого, куда будем вставлять ответ
+        // Create an element for the content where the response will be inserted
         const aiBubble = document.createElement("div");
         aiBubble.className = "bubble";
         aiDiv.appendChild(aiBubble);
@@ -37,13 +37,13 @@ document.addEventListener("DOMContentLoaded", function() {
             let token = data.text;
             console.log(token);
             fullText += token;
-            // Преобразуем Markdown в HTML (при условии, что marked.js подключен)
+            // Convert Markdown to HTML (assuming marked.js is connected)
             aiBubble.innerHTML = marked.parse(fullText);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         };
 
         eventSource.onerror = function(e) {
-            console.error("Ошибка SSE:", e);
+            console.error("SSE error:", e);
             eventSource.close();
         };
     });

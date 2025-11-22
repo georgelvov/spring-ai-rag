@@ -1,4 +1,4 @@
-package com.glvov.springairag.ai;
+package com.glvov.springairag.advisor.misc;
 
 import com.github.pemistahl.lingua.api.Language;
 import com.github.pemistahl.lingua.api.LanguageDetector;
@@ -13,7 +13,6 @@ import org.apache.lucene.analysis.ru.RussianAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.springframework.ai.document.Document;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -36,7 +35,6 @@ import java.util.stream.Collectors;
  *     <li>Sums the BM25 scores for all query terms to get the overall document ranking.</li>
  * </ul>
  */
-
 @Builder
 public class BM25RerankEngine {
 

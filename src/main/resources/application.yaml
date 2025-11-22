@@ -1,18 +1,55 @@
 logging:
   level:
+    com.glvov.springairag.advisor.RequestLoggerAdvisor: DEBUG
     org.springframework.ai.chat.client.advisor: DEBUG
 
 spring:
+  profiles:
+    # ollama (locally started) or mistral (remote)
+    active: ollama
   application:
-    name: spring-ai-rag-ollama
+    name: spring-ai-rag
   main:
     allow-circular-references: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/ragdb
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: postgres
   ai:
+    vectorstore:
+      chunk-size: 100
+    chat:
+      memory:
+        max-messages: 8
+
+---
+spring:
+  config:
+    activate:
+      on-profile: ollama
+  ai:
+    model:
+      chat: ollama
+      embedding: ollama
+      moderation: ollama
     ollama:
       chat:
         model: gemma3:4b-it-q4_K_M
       base-url: http://localhost:11431
+
+---
+spring:
+  config:
+    activate:
+      on-profile: mistral
+  ai:
+    model:
+      chat: mistral
+      embedding: mistral
+      moderation: mistral
+    mistralai:
+      api-key: ${MISTRAL_API_KEY}
+      chat:
+        options:
+          #model: "mistral-small-latest"
+          model: "mistral-small-2503"

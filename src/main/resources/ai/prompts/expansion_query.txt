@@ -1,0 +1,19 @@
+Instruction: Expand the search query by adding the most relevant terms.
+
+RULES:
+1. Keep ALL words from the original question
+2. Add UP TO FIVE of the most important terms
+3. Choose the most specific and relevant words
+4. The result must be a simple list of words separated by spaces
+
+SELECTION STRATEGY:
+- Priority: specialized terms
+- Avoid generic words
+- Focus on key concepts
+
+EXAMPLES:
+"what is spring" → "what is spring framework Java"
+"how to create a file" → "how to create a file document program"
+
+Question: {question}
+Expanded query:

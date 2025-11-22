@@ -1,0 +1,117 @@
+///////////////////////
+Temperature
+///////////////////////
+🔹 Low temperature (close to 0, e.g., 0.2)
+The neural network becomes very cautious and predictable. It will choose only the most probable next words.
+Responses are clear and to the point but can be boring, repetitive, and lacking originality.
+
+Analogy: "strict instruction" mode.
+Suitable for: factual summaries, writing code according to precise specifications.
+
+🔹 High temperature (e.g., 0.9)
+The neural network becomes "bolder." It starts considering less likely, more unexpected words.
+Responses become creative, diverse, sometimes even witty.
+But there is a risk: the text can become incoherent, contain made-up facts, or just nonsense.
+
+Analogy: "brainstorming" mode.
+Suitable for: idea generation, creative writing, exploring unusual phrasings.
+
+///////////////////////
+Top-P (Nucleus Sampling) — selection limiter
+///////////////////////
+
+Temperature controls how much the model likes to take risks (choosing less predictable words),
+while Top-P controls how wide the pool of words is that the model considers before making a choice.
+In other words, this parameter often goes hand-in-hand with temperature and offers another way to control output.
+Instead of changing the probabilities of all words (like temperature), Top-P limits the set of words the model can
+choose from. Top-P is often used as an alternative to high temperature to get creative but more coherent responses.
+
+How it works:
+For example, after the phrase: "Today outside is very..."
+
+Possible continuations and their probabilities might be:
+
+Word	Probability
+hot	        0.4
+cold	    0.3
+beautiful	0.1
+rainy	    0.05
+cheerful	0.05
+noisy	    0.05
+boring	    0.05
+
+🔹 If topP = 0.1
+Start from the top, the most probable word:
+hot → 0.4 (already exceeds 0.1).
+Stop!
+We reached "word probability >= topP."
+Only one word — "hot" — is included in the pool.
+
+🔹 If topP = 0.9
+We take the most probable words from the top until their cumulative probability reaches 0.9. Step by step:
+"hot" → 0.4 → cumulative 0.4
+"cold" → 0.3 → cumulative 0.7
+"beautiful" → 0.1 → cumulative 0.8
+"rainy" → 0.05 → cumulative 0.85
+"cheerful" → 0.05 → cumulative 0.9 ✅
+Total probability = 0.9, the remaining words are excluded.
+
+🔹 How the LLM selects
+The LLM randomly selects a word from this pool, with probability proportional to the original word probability.
+So "hot" is chosen more often than "rainy" or "cheerful," because it has 0.4 vs. 0.05.
+
+///////////////////////
+Top-K
+///////////////////////
+
+🔹 What is top-K
+Top-K limits the model’s choice to a fixed number of words instead of a probability sum.
+We tell the model:
+"Look only at the topK most probable words and randomly pick one."
+All other words are completely ignored, even if they have high probability.
+
+🔹 Example
+Word	Probability
+hot     	0.4
+cold	    0.3
+beautiful	0.1
+rainy	    0.05
+cheerful	0.05
+noisy	    0.05
+boring	    0.05
+
+If topK = 3, we take the three most probable words:
+"hot," "cold," "beautiful."
+The model randomly selects one of these three, proportional to their original chances.
+Words "rainy," "cheerful," "noisy," "boring" are completely excluded.
+
+///////////////////////
+Repeat Penalty
+///////////////////////
+
+RepeatPenalty is a parameter that helps LLMs avoid repeating the same word or phrase over and over.
+
+🔹 Simple explanation
+LLMs sometimes repeat the same words or expressions when generating text.
+RepeatPenalty is a way to "penalize" the model for repetition.
+The higher the value, the more the model avoids repeats.
+
+🔹 How it works in practice
+The model picks the next word.
+If that word has already appeared in the text, its probability is divided by repeatPenalty.
+For example:
+repeatPenalty = 1.2 → probability slightly reduced
+repeatPenalty = 2.0 → probability halved
+The model can still choose the word, but less often than new words.
+
+🔹 Example
+Text:
+"Today outside is hot, and hot is very pleasant."
+Without repeatPenalty, the model might continue: "hot, hot, hot…"
+With repeatPenalty = 1.5, the probability of "hot" is reduced after the first occurrence → the model
+chooses more diverse words like "sunny" or "warm."
+
+🔹 Summary
+repeatPenalty = 1.0 → no penalty, repeats allowed
+repeatPenalty > 1.0 → repeats are less likely
+Helps make text more natural and varied

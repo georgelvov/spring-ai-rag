@@ -1,4 +1,4 @@
-package com.glvov.springairag.services;
+package com.glvov.springairag.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.document.Document;
@@ -13,17 +13,21 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class VectorService {
+public class VectorStoreService {
+
+    @Value("${spring.ai.vectorstore.chunk-size:100}")
+    private final int chunkSize;
 
     private final VectorStore vectorStore;
-
-    @Value("${chunk.size:200}")
-    private int chunkSize;
 
 
     public List<Document> save(Resource resource) {
         List<Document> documents = new TextReader(resource).get();
-        TokenTextSplitter textSplitter = TokenTextSplitter.builder().withChunkSize(chunkSize).build();
+
+        TokenTextSplitter textSplitter = TokenTextSplitter.builder()
+                .withChunkSize(chunkSize) // max tokens for one chunk
+                .build();
+
         List<Document> chunks = textSplitter.apply(documents);
 
         vectorStore.accept(chunks);
