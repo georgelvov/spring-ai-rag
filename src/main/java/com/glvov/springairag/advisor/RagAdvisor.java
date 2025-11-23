@@ -1,7 +1,6 @@
 package com.glvov.springairag.advisor;
 
 import com.glvov.springairag.advisor.misc.BM25RerankEngine;
-import com.glvov.springairag.utils.FileLoader;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.ai.chat.client.ChatClientRequest;
@@ -10,8 +9,11 @@ import org.springframework.ai.chat.client.advisor.api.AdvisorChain;
 import org.springframework.ai.chat.client.advisor.api.BaseAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
 import java.util.List;
 import java.util.Map;
@@ -26,7 +28,14 @@ import static com.glvov.springairag.utils.FileLoader.loadFile;
  * <br><br>
  * This advisor:
  * <ul>
- *   <li>Retrieves relevant documents from a vector store based on the user's query</li>
+ *   <li>
+ *       Retrieves relevant documents from a vector store based on the user's query:
+ *       <ol>
+ *         <li>{@link VectorStore#similaritySearch(String)} - Entry point</li>
+ *         <li>Converting query to vector embeddings via LLM {@link EmbeddingModel#embed(String)}</li>
+ *         <li>Search similarity using  {@link JdbcTemplate#query(String, RowMapper, Object...)}</li>
+ *       </ol>
+ *   </li>
  *   <li>Optionally reranks results using BM25 algorithm for improved relevance</li>
  *   <li>Formats retrieved documents into context for the LLM prompt</li>
  *   <li>Augments the user's original question with this context</li>
