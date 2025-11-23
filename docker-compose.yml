@@ -22,7 +22,7 @@ services:
     image: ollama/ollama
     container_name: ollama-test
     ports:
-      - "11431:11434"
+      - "11434:11434"
     volumes:
       - ./ollama:/root/.ollama
     entrypoint: >
