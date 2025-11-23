@@ -13,7 +13,8 @@ This project includes a Docker Compose configuration that sets up both PostgreSQ
 docker-compose up -d
 ```
 This will start:
-- PostgreSQL database on port 5432
+- PostgreSQL database with pgvector extension (ankane/pgvector:v0.5.0) on port 5432
+  - pgvector is a PostgreSQL extension that enables vector similarity search capabilities, which is essential for storing and querying embeddings in our RAG application
 - Ollama service on port 11431
 
 ### 2. Initialize the Database
@@ -58,8 +59,18 @@ Or with Mistral profile:
 ```
 ## Architecture
 This application implements a Retrieval Augmented Generation (RAG) pattern that enhances LLM responses with relevant information from a vector database.
+
+The database schema uses pgvector to store and query vector embeddings efficiently:
+
+![Database Schema](db-diagramm.png)
+
+- **chat**: Stores chat id, creation timestamp, and title
+- **chat_entry**: Stores individual messages in a chat with content, timestamp, and role (USER/ASSISTANT)
+- **vector_store**: Stores vector embeddings of RAG documents for similarity search
+- **loaded_document**: Stores info about RAG documents loaded into the vector_store during application startup to prevent processing and loading them multiple times
 ## Troubleshooting
 - If using Docker Compose, ensure all services are running: `docker-compose ps`
 - For Ollama, verify models are downloaded by checking: `curl http://localhost:11431/api/tags`
 - For Mistral API, verify your API key is correct and properly set
-- Check that database tables were properly created with the initialization script
+- Check that database tables were properly created with the initialization script and are correctly populated with RAG data after application startup
+
