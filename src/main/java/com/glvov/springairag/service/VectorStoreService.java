@@ -26,7 +26,7 @@ import java.util.List;
  * <ul>
  *   <li>Loading documents from resources</li>
  *   <li>Splitting documents into appropriate chunks</li>
- *   <li>Converting chunks to vector embeddings via LLM</li>
+ *   <li>Converting chunks to vector embeddings via embeddings model (like Ollama mxbai-embed-large)</li>
  *   <li>Storing the embeddings in the vector database</li>
  * </ul>
  * <p>
