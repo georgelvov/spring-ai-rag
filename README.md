@@ -1,7 +1,7 @@
 # Spring AI RAG Application
 This project is a Retrieval Augmented Generation (RAG) application built with Spring AI, leveraging LLMs via either local Ollama or Mistral API.
 
-![RAG Architecture Schema](rag-schema.png)
+![RAG Architecture Schema](/diagramms/rag.png)
 
 
 ## Setup Instructions
@@ -62,7 +62,7 @@ This application implements a Retrieval Augmented Generation (RAG) pattern that 
 
 The database schema uses pgvector to store and query vector embeddings efficiently:
 
-![Database Schema](db-diagramm.png)
+![Database Schema](/diagramms/db.png)
 
 - **chat**: Stores chat id, creation timestamp, and title
 - **chat_entry**: Stores individual messages in a chat with content, timestamp, and role (USER/ASSISTANT)

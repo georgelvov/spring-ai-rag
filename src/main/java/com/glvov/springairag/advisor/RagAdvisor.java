@@ -31,7 +31,7 @@ import static com.glvov.springairag.utils.FileLoader.loadFile;
  *   <li>
  *       Retrieves relevant documents from a vector store based on the user's query:
  *       <ol>
- *         <li>{@link VectorStore#similaritySearch(String)} - Entry point</li>
+ *         <li>{@link VectorStore#similaritySearch(SearchRequest)} - Entry point</li>
  *         <li>Converting query to vector embeddings via LLM {@link EmbeddingModel#embed(String)}</li>
  *         <li>Search similarity using  {@link JdbcTemplate#query(String, RowMapper, Object...)}</li>
  *       </ol>
