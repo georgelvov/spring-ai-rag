@@ -1,6 +1,7 @@
 ///////////////////////
 Temperature
 ///////////////////////
+
 🔹 Low temperature (close to 0, e.g., 0.2)
 The neural network becomes very cautious and predictable. It will choose only the most probable next words.
 Responses are clear and to the point but can be boring, repetitive, and lacking originality.
